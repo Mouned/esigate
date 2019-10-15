@@ -119,14 +119,14 @@ public class HttpClientHelper {
 		// Create an HttpClient with the ThreadSafeClientConnManager.
 		// This connection manager must be used if more than one thread will
 		// be using the HttpClient.
-		PoolingClientConnectionManager connectionManager = new PoolingClientConnectionManager(schemeRegistry);
+		/*PoolingClientConnectionManager connectionManager = new PoolingClientConnectionManager(schemeRegistry);
 		connectionManager.setMaxTotal(Parameters.MAX_CONNECTIONS_PER_HOST.getValueInt(properties));
-		connectionManager.setDefaultMaxPerRoute(Parameters.MAX_CONNECTIONS_PER_HOST.getValueInt(properties));
+		connectionManager.setDefaultMaxPerRoute(Parameters.MAX_CONNECTIONS_PER_HOST.getValueInt(properties));*/
 		HttpParams httpParams = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(httpParams, Parameters.CONNECT_TIMEOUT.getValueInt(properties));
 		HttpConnectionParams.setSoTimeout(httpParams, Parameters.SOCKET_TIMEOUT.getValueInt(properties));
 		httpParams.setBooleanParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
-		DefaultHttpClient defaultHttpClient = new DefaultHttpClient(connectionManager, httpParams);
+		DefaultHttpClient defaultHttpClient = new DefaultHttpClient(httpParams);
 		defaultHttpClient.setRedirectStrategy(new RedirectStrategy());
 		// Proxy settings
 		if (proxyHost != null) {
