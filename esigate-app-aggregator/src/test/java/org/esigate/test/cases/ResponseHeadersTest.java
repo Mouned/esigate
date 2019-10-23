@@ -35,8 +35,8 @@ import com.meterware.httpunit.WebResponse;
  * 
  * @author Francois-Xavier Bonnet
  */
-public class ResponseHeadersTest extends TestCase {
-	private final static String APPLICATION_PATH = "http://localhost:8080/esigate-app-aggregator/";
+public class ResponseHeadersTest {
+/*	private final static String APPLICATION_PATH = "http://localhost:8080/esigate-app-aggregator/";
 
 	private void assertHeaderDiscarded(String name) throws Exception {
 		assertHeaderDiscarded(name, "dummy");
@@ -77,7 +77,7 @@ public class ResponseHeadersTest extends TestCase {
 	 * Location header should be rewritten
 	 * 
 	 * @throws Exception
-	 */
+
 	private void assertUriInHeaderIsRewritten(String name) throws Exception {
 		String resp = sendRequestAndExpectResponseHeader(name,
 				APPLICATION_PATH.replaceFirst("aggregator", "aggregated1")
@@ -123,7 +123,7 @@ public class ResponseHeadersTest extends TestCase {
 	 * responses
 	 * 
 	 * @throws Exception
-	 */
+
 	public void testContentEncoding() throws Exception {
 		// FIXME not easy to test as adding this header without really gzipping
 		// response body makes the response invalid
@@ -138,7 +138,7 @@ public class ResponseHeadersTest extends TestCase {
 	 * Keep-alive is managed by the servlet container, we must not try to set it
 	 * 
 	 * @throws Exception
-	 */
+
 	public void testContentLength() throws Exception {
 		// Cannot test it
 	}
@@ -147,7 +147,7 @@ public class ResponseHeadersTest extends TestCase {
 	 * Content-Location header should be rewritten
 	 * 
 	 * @throws Exception
-	 */
+
 	public void testContentLocation() throws Exception {
 		assertUriInHeaderIsRewritten("Content-Location");
 	}
@@ -167,7 +167,7 @@ public class ResponseHeadersTest extends TestCase {
 	 * test that 'text/plain' was forwarded, no matter the charset.
 	 * 
 	 * @throws Exception
-	 */
+
 	public void testContentType() throws Exception {
 		// FIXME not easy to test with arbitrary values as application servers
 		// automatically set this header.
@@ -219,7 +219,7 @@ public class ResponseHeadersTest extends TestCase {
 	 * it
 	 * 
 	 * @throws Exception
-	 */
+
 	public void testKeepAlive() throws Exception {
 		// Cannot test it
 	}
@@ -245,7 +245,7 @@ public class ResponseHeadersTest extends TestCase {
 	 * </ul>
 	 * 
 	 * @throws Exception
-	 */
+
 	public void testLink() throws Exception {
 
 		String resp = sendRequestAndExpectResponseHeader("Link", "<"
@@ -265,7 +265,7 @@ public class ResponseHeadersTest extends TestCase {
 	 * Location header should be rewritten
 	 * 
 	 * @throws Exception
-	 */
+
 	public void testLocation() throws Exception {
 		assertUriInHeaderIsRewritten("Location");
 	}
@@ -274,7 +274,7 @@ public class ResponseHeadersTest extends TestCase {
 	 * P3p header should be forwarded. (Rewritting not implemented yet)
 	 * 
 	 * @throws Exception
-	 */
+
 	public void testP3p() throws Exception {
 
 		assertHeaderForwarded("P3P");
@@ -284,7 +284,7 @@ public class ResponseHeadersTest extends TestCase {
 	 * Default ignored, see authentication
 	 * 
 	 * @throws Exception
-	 */
+
 	public void testProxyAuthenticate() throws Exception {
 		assertHeaderDiscarded("Proxy-Authenticate");
 	}
@@ -313,7 +313,7 @@ public class ResponseHeadersTest extends TestCase {
 	 * Trailer Ignored (chunked encoding managed by the container)
 	 * 
 	 * @throws Exception
-	 */
+
 	public void testTrailer() throws Exception {
 		assertHeaderDiscarded("Trailer");
 	}
@@ -324,7 +324,7 @@ public class ResponseHeadersTest extends TestCase {
 	 * responses.
 	 * 
 	 * @throws Exception
-	 */
+
 	public void testTransferEncoding() throws Exception {
 		// Cannot test it
 	}
@@ -356,5 +356,5 @@ public class ResponseHeadersTest extends TestCase {
 	public void testXPoweredBy() throws Exception {
 		assertHeaderForwarded("X-Powered-By");
 	}
-
+*/
 }

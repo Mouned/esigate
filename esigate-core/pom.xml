@@ -5,10 +5,10 @@
 	<parent>
 		<artifactId>esigate</artifactId>
 		<groupId>org.esigate</groupId>
-		<version>4.4</version>
+		<version>4.4-PATCH-3</version>
 	</parent>
 	<repositories>
-		<repository>
+		<!--<repository>
 			<id>spy</id>
 			<name>Spy Repository</name>
 			<layout>default</layout>
@@ -16,7 +16,7 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-		</repository>
+		</repository> -->
 	</repositories>
 	<dependencies>
 		<dependency>

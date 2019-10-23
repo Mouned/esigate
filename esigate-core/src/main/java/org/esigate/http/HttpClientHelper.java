@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 
@@ -38,6 +39,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -50,6 +52,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.DefaultedHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.pool.PoolStats;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HttpContext;
@@ -119,7 +122,7 @@ public class HttpClientHelper {
 		// Create an HttpClient with the ThreadSafeClientConnManager.
 		// This connection manager must be used if more than one thread will
 		// be using the HttpClient.
-		PoolingClientConnectionManager connectionManager = new PoolingClientConnectionManager(schemeRegistry);
+		PoolingClientConnectionManager connectionManager = new PoolingClientConnectionManager(schemeRegistry,10000L, TimeUnit.MILLISECONDS);
 		connectionManager.setMaxTotal(Parameters.MAX_CONNECTIONS_PER_HOST.getValueInt(properties));
 		connectionManager.setDefaultMaxPerRoute(Parameters.MAX_CONNECTIONS_PER_HOST.getValueInt(properties));
 		HttpParams httpParams = new BasicHttpParams();
@@ -235,6 +238,11 @@ public class HttpClientHelper {
 			if (event.httpResponse == null) {
 				try {
 					HttpHost host = (HttpHost) httpRequest.getParams().getParameter(TARGET_HOST);
+					
+					if(leakConnection(httpClient, httpRequest))
+						// close expired connection (to prevent leak connection in PoolHttpClienConnection)
+						httpClient.getConnectionManager().closeExpiredConnections();
+					
 					HttpResponse response = httpClient.execute(host, httpRequest, httpContext);
 					result = new BasicHttpResponse(response.getStatusLine());
 					headerManager.copyHeaders(httpRequest, originalRequest, response, result);
@@ -263,6 +271,31 @@ public class HttpClientHelper {
 	 */
 	public EventManager getEventManager() {
 		return eventManager;
+	}
+	
+	private boolean leakConnection(HttpClient httpClient, GenericHttpRequest httpRequest) {
+
+		ClientConnectionManager manager = httpClient.getConnectionManager();
+
+		try {
+			PoolingClientConnectionManager pool = (PoolingClientConnectionManager) manager;
+			PoolStats poolStats = pool.getTotalStats();
+
+			double leasedConnection = (double)poolStats.getLeased();
+			double pendingConnection = (double)poolStats.getPending();
+			double maxConnection = (double)poolStats.getMax();
+
+			if(pendingConnection != 0) {
+				LOG.debug("[max : " + maxConnection + "] ; [ available : " + poolStats.getAvailable() + " ] ; [ leased : " + poolStats.getLeased() + " ] ; [pending : " + poolStats.getPending() + " ]");
+				LOG.debug ("request HTTP : " + httpRequest.toString());
+			}
+
+			double connectionUsed = leasedConnection + pendingConnection;
+
+			return (connectionUsed/maxConnection) >= 0.75;
+		} catch(ClassCastException e){
+			return false;
+		}
 	}
 
 }

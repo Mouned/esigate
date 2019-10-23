@@ -12,7 +12,7 @@
 	<artifactId>esigate</artifactId>
 	<packaging>pom</packaging>
 	<name>esigate</name>
-	<version>4.4</version>
+	<version>4.4-PATCH-3</version>
 	<inceptionYear>2008</inceptionYear>
 	<mailingLists>
 		<mailingList>
@@ -110,8 +110,8 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>2.3.2</version>
 					<configuration>
-						<source>1.5</source>
-						<target>1.5</target>
+						<source>1.8</source>
+						<target>1.8</target>
 						<encoding>UTF-8</encoding>
 					</configuration>
 				</plugin>
@@ -532,7 +532,7 @@ These dependencies are required : release pugin 2.4.1 depends on a previous vers
 			<dependency>
 				<groupId>org.jasig.cas</groupId>
 				<artifactId>cas-client-core</artifactId>
-				<version>3.1.8</version>
+				<version>3.2</version>
 				<scope>compile</scope>
 				<exclusions>
 					<exclusion>
@@ -686,6 +686,8 @@ These dependencies are required : release pugin 2.4.1 depends on a previous vers
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<dependency.httpclient.version>4.2.5</dependency.httpclient.version>
 		<currentVersion>${project.version}</currentVersion>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 </properties>
 
 </project>
